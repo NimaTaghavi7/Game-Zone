@@ -7,6 +7,7 @@ import type { Genre } from "./hooks/useGenres";
 import PlatformSelector from "./components/PlatformSelector";
 import type { Platform } from "./hooks/useGames";
 import SortSelector from "./components/SortSelector";
+import SearchInput from "./components/SearchInput";
 // import reactLogo from "./assets/react.svg";
 // import viteLogo from "/vite.svg";
 // import NavBar from "./NavBar";
@@ -15,6 +16,7 @@ export interface GameQuery {
   genre: Genre | null;
   platform: Platform | null; 
   sortOrder: string;
+  searchText: String;
 }
 
 
@@ -32,7 +34,7 @@ function App() {
       }}
     >
       <GridItem area="nav">
-        <NavBar />
+      <NavBar onSearch={( searchText ) => setGameQuery({ ...gameQuery, searchText})}  />
       </GridItem>
 
       <Show above="lg">
