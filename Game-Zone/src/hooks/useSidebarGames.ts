@@ -7,6 +7,7 @@ const getRandomPage = () => Math.floor(Math.random() * 5) + 1;
 const useSidebarGames = () => {
   const popularPage = useMemo(() => getRandomPage(), []);
   const topRatedPage = useMemo(() => getRandomPage(), []);
+  const recommendedPage = useMemo(() => getRandomPage(), []);
 
   const {
     data: popularData,
@@ -40,15 +41,37 @@ const useSidebarGames = () => {
     [topRatedPage],
   );
 
+  const {
+    data: recommendedData,
+    error: recommendedError,
+    isLoading: recommendedLoading,
+  } = useData<Game>(
+    "/games",
+    {
+      params: {
+        page_size: 30,
+        ordering: "-added",
+        page: recommendedPage,
+      },
+    },
+    [recommendedPage],
+  );
+
   const popularGames = useMemo(() => {
     return [...popularData]
-      .filter((game) => game.background_image && game.name)
+      .filter(
+        (game) =>
+          game.background_image &&
+          game.name,
+      )
       .sort(() => Math.random() - 0.5)
       .slice(0, 10);
   }, [popularData]);
 
   const topRatedGames = useMemo(() => {
-    const popularIds = new Set(popularGames.map((game) => game.id));
+    const popularIds = new Set(
+      popularGames.map((game) => game.id),
+    );
 
     return [...topRatedData]
       .filter(
@@ -63,11 +86,35 @@ const useSidebarGames = () => {
       .slice(0, 10);
   }, [topRatedData, popularGames]);
 
+  const recommendedGames = useMemo(() => {
+    const excludedIds = new Set([
+      ...popularGames.map((game) => game.id),
+      ...topRatedGames.map((game) => game.id),
+    ]);
+
+    return [...recommendedData]
+      .filter(
+        (game) =>
+          game.background_image &&
+          game.name &&
+          !excludedIds.has(game.id),
+      )
+      .sort(() => Math.random() - 0.5)
+      .slice(0, 10);
+  }, [recommendedData, popularGames, topRatedGames]);
+
   return {
     popularGames,
     topRatedGames,
-    isLoading: popularLoading || topRatedLoading,
-    error: popularError || topRatedError,
+    recommendedGames,
+    isLoading:
+      popularLoading ||
+      topRatedLoading ||
+      recommendedLoading,
+    error:
+      popularError ||
+      topRatedError ||
+      recommendedError,
   };
 };
 
