@@ -9,6 +9,7 @@ import type { Platform } from "./hooks/useGames";
 import SortSelector from "./components/SortSelector";
 import GameHeading from "./components/GameHeading";
 import MobileGenreSelector from "./components/MobileGenreSelector";
+import SidebarRecommendations from "./components/SidebarRecommendations";
 
 export interface GameQuery {
   genre: Genre | null;
@@ -44,6 +45,8 @@ function App() {
             selectedGenre={gameQuery.genre}
             onSelectGenre={(genre) => setGameQuery({ ...gameQuery, genre })}
           />
+
+          <SidebarRecommendations />
         </GridItem>
       </Show>
 
