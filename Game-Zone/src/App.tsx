@@ -10,6 +10,7 @@ import SortSelector from "./components/SortSelector";
 import GameHeading from "./components/GameHeading";
 import MobileGenreSelector from "./components/MobileGenreSelector";
 import SidebarRecommendations from "./components/SidebarRecommendations";
+import ResetFilters from "./components/ResetFilters";
 
 export interface GameQuery {
   genre: Genre | null;
@@ -72,6 +73,16 @@ function App() {
               sortOrder={gameQuery.sortOrder}
               onSelectSortOrder={(sortOrder) =>
                 setGameQuery({ ...gameQuery, sortOrder })
+              }
+            />
+            <ResetFilters
+              onReset={() =>
+                setGameQuery({
+                  genre: null,
+                  platform: null,
+                  sortOrder: "",
+                  searchText: "",
+                })
               }
             />
           </Flex>
