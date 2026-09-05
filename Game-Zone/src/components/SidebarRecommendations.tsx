@@ -12,41 +12,24 @@ import {
 import useSidebarGames from "../hooks/useSidebarGames";
 import SidebarGameItem from "./SidebarGameItem";
 
-type OpenSection =
-  | "popular"
-  | "topRated"
-  | "recommended"
-  | null;
+type OpenSection = "popular" | "topRated" | "recommended" | null;
 
 const SidebarRecommendations = () => {
-  const {
-    popularGames,
-    topRatedGames,
-    recommendedGames,
-    isLoading,
-    error,
-  } = useSidebarGames();
+  const { popularGames, topRatedGames, recommendedGames, isLoading, error } =
+    useSidebarGames();
 
-  const [openSection, setOpenSection] =
-    useState<OpenSection>(null);
+  const [openSection, setOpenSection] = useState<OpenSection>(null);
 
   if (error) return null;
 
   if (isLoading) {
     return (
       <Box marginTop={8}>
-        <Text
-          fontSize="lg"
-          fontWeight="bold"
-          marginBottom={2}
-        >
+        <Text fontSize="lg" fontWeight="bold" marginBottom={2}>
           🎮 Game Zone
         </Text>
 
-        <Text
-          fontSize="sm"
-          color="gray.500"
-        >
+        <Text fontSize="sm" color="gray.500">
           Discover your next favorite game.
         </Text>
       </Box>
@@ -54,54 +37,34 @@ const SidebarRecommendations = () => {
   }
 
   const visiblePopularGames =
-    openSection === "popular"
-      ? popularGames
-      : popularGames.slice(0, 5);
+    openSection === "popular" ? popularGames : popularGames.slice(0, 5);
 
   const visibleTopRatedGames =
-    openSection === "topRated"
-      ? topRatedGames
-      : topRatedGames.slice(0, 5);
+    openSection === "topRated" ? topRatedGames : topRatedGames.slice(0, 5);
 
   const visibleRecommendedGames =
     openSection === "recommended"
       ? recommendedGames
       : recommendedGames.slice(0, 5);
 
-  const handleToggle = (
-    section: Exclude<OpenSection, null>,
-  ) => {
-    setOpenSection((current) =>
-      current === section ? null : section,
-    );
+  const handleToggle = (section: Exclude<OpenSection, null>) => {
+    setOpenSection((current) => (current === section ? null : section));
   };
 
   return (
     <Box marginTop={8}>
-      <Text
-        fontSize="lg"
-        fontWeight="bold"
-        marginBottom={2}
-      >
+      <Text fontSize="lg" fontWeight="bold" marginBottom={2}>
         🎮 Game Zone
       </Text>
 
-      <Text
-        fontSize="sm"
-        color="gray.500"
-        lineHeight="1.6"
-        marginBottom={7}
-      >
+      <Text fontSize="sm" color="gray.500" lineHeight="1.6" marginBottom={7}>
         Discover your next favorite game.
       </Text>
 
       <Divider marginY={7} />
 
       {/* Popular Games */}
-      <Heading
-        fontSize="xl"
-        marginBottom={3}
-      >
+      <Heading fontSize="xl" marginBottom={3}>
         🔥 Popular Games
       </Heading>
 
@@ -127,19 +90,14 @@ const SidebarRecommendations = () => {
           }}
           onClick={() => handleToggle("popular")}
         >
-          {openSection === "popular"
-            ? "Show less"
-            : "View more"}
+          {openSection === "popular" ? "Show less" : "View more"}
         </Button>
       )}
 
       <Divider marginY={7} />
 
       {/* Top Rated */}
-      <Heading
-        fontSize="xl"
-        marginBottom={3}
-      >
+      <Heading fontSize="xl" marginBottom={3}>
         ⭐ Top Rated
       </Heading>
 
@@ -165,19 +123,13 @@ const SidebarRecommendations = () => {
           }}
           onClick={() => handleToggle("topRated")}
         >
-          {openSection === "topRated"
-            ? "Show less"
-            : "View more"}
+          {openSection === "topRated" ? "Show less" : "View more"}
         </Button>
       )}
 
       <Divider marginY={7} />
 
-      
-      <Heading
-        fontSize="xl"
-        marginBottom={3}
-      >
+      <Heading fontSize="xl" marginBottom={3}>
         🎯 Recommended Games
       </Heading>
 
@@ -201,13 +153,9 @@ const SidebarRecommendations = () => {
             color: "gray.700",
             background: "transparent",
           }}
-          onClick={() =>
-            handleToggle("recommended")
-          }
+          onClick={() => handleToggle("recommended")}
         >
-          {openSection === "recommended"
-            ? "Show less"
-            : "View more"}
+          {openSection === "recommended" ? "Show less" : "View more"}
         </Button>
       )}
     </Box>

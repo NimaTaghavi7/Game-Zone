@@ -18,11 +18,7 @@ const SidebarGameItem = ({ game }: Props) => {
         flexShrink={0}
       />
 
-      <Text
-        fontSize="sm"
-        fontWeight="medium"
-        noOfLines={2}
-      >
+      <Text fontSize="sm" fontWeight="medium" noOfLines={2}>
         {game.name}
       </Text>
     </HStack>
