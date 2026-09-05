@@ -2,46 +2,72 @@ import { useMemo } from "react";
 import useData from "./useData";
 import type { Game } from "./useGames";
 
+const getRandomPage = () => Math.floor(Math.random() * 5) + 1;
+
 const useSidebarGames = () => {
-  const { data, error, isLoading } = useData<Game>(
+  const popularPage = useMemo(() => getRandomPage(), []);
+  const topRatedPage = useMemo(() => getRandomPage(), []);
+
+  const {
+    data: popularData,
+    error: popularError,
+    isLoading: popularLoading,
+  } = useData<Game>(
     "/games",
     {
       params: {
-        page_size: 40,
+        page_size: 30,
         ordering: "-rating",
+        page: popularPage,
       },
     },
-    [],
+    [popularPage],
   );
 
-  const games = useMemo(() => {
-    const validGames = data.filter(
-      (game) => game.background_image && game.name,
-    );
+  const {
+    data: topRatedData,
+    error: topRatedError,
+    isLoading: topRatedLoading,
+  } = useData<Game>(
+    "/games",
+    {
+      params: {
+        page_size: 30,
+        ordering: "-metacritic",
+        page: topRatedPage,
+      },
+    },
+    [topRatedPage],
+  );
 
-    const shuffled = [...validGames].sort(() => Math.random() - 0.5);
+  const popularGames = useMemo(() => {
+    return [...popularData]
+      .filter((game) => game.background_image && game.name)
+      .sort(() => Math.random() - 0.5)
+      .slice(0, 10);
+  }, [popularData]);
 
-    return shuffled;
-  }, [data]);
+  const topRatedGames = useMemo(() => {
+    const popularIds = new Set(popularGames.map((game) => game.id));
 
-  const popularGames = games.slice(0, 10);
-
-  const topRatedGames = [...data]
-    .filter(
-      (game) =>
-        game.background_image &&
-        game.name &&
-        game.metacritic !== null &&
-        game.metacritic !== undefined,
-    )
-    .sort((a, b) => b.metacritic - a.metacritic)
-    .slice(0, 10);
+    return [...topRatedData]
+      .filter(
+        (game) =>
+          game.background_image &&
+          game.name &&
+          game.metacritic !== null &&
+          game.metacritic !== undefined &&
+          !popularIds.has(game.id),
+      )
+      .sort(() => Math.random() - 0.5)
+      .slice(0, 10);
+  }, [topRatedData, popularGames]);
 
   return {
     popularGames,
     topRatedGames,
-    error,
-    isLoading,
+    isLoading: popularLoading || topRatedLoading,
+    error: popularError || topRatedError,
   };
 };
 
