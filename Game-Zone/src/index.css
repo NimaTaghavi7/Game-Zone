@@ -2,3 +2,17 @@ form {
     width: 100%;
 }
 
+.reset-spin {
+  display: flex;
+  animation: reset-spin 0.5s ease;
+}
+
+@keyframes reset-spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}

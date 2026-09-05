@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Button } from "@chakra-ui/react";
 import { FiRefreshCw } from "react-icons/fi";
 
@@ -6,6 +7,17 @@ interface Props {
 }
 
 const ResetFilters = ({ onReset }: Props) => {
+  const [isRotating, setIsRotating] = useState(false);
+
+  const handleReset = () => {
+    setIsRotating(true);
+    onReset();
+
+    setTimeout(() => {
+      setIsRotating(false);
+    }, 500);
+  };
+
   return (
     <Button
       size="md"
@@ -14,9 +26,11 @@ const ResetFilters = ({ onReset }: Props) => {
       paddingX={0}
       aria-label="Reset filters"
       title="Reset filters"
-      onClick={onReset}
+      onClick={handleReset}
     >
-      <FiRefreshCw size={17} />
+      <span className={isRotating ? "reset-spin" : ""}>
+        <FiRefreshCw size={17} />
+      </span>
     </Button>
   );
 };
